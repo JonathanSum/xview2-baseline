@@ -1,15 +1,15 @@
-name: "Run Anchore Scan Action"
-
+name: Docker Image CI
 on: [push]
-
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
+    - name: Build the Docker image
+      run: docker build ./submission/ --file Dockerfile --tag localbuild/testimage:latest
     - uses: anchore/scan-action@master
       with:
-         image-reference: "localbuild/testimage:latest"
-         dockerfile-path: "./submission/Dockerfile"
-         fail-build: true
-         include-app-packages: true
+        image-reference: "localbuild/testimage:latest"
+        dockerfile-path: "./submission/Dockerfile"
+        include-app-packages: true  
+        fail-build: true
