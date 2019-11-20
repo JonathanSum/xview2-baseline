@@ -6,7 +6,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Build the Docker image
-      run: docker build ./submission/ --file Dockerfile --tag localbuild/testimage:latest
+      run: docker build . --file ./submission/Dockerfile --tag localbuild/testimage:latest
     - uses: anchore/scan-action@master
       with:
         image-reference: "localbuild/testimage:latest"
