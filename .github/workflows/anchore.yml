@@ -9,6 +9,7 @@ jobs:
     - uses: actions/checkout@v1
     - uses: anchore/scan-action@master
       with:
+         image-reference: "localbuild/testimage:latest"
          dockerfile-path: "./submission/Dockerfile"
          fail-build: true
          include-app-packages: true
