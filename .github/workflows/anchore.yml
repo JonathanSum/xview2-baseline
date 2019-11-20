@@ -1,0 +1,6 @@
+ - uses: anchore/scan-action@master
+       with:
+         image-reference: "xview2-cmu-baseline/xview2-cmu-baseline:latest"
+         dockerfile-path: "./submission/Dockerfile"
+         fail-build: true
+         include-app-packages: true
