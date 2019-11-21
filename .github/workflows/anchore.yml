@@ -1,6 +1,15 @@
- - uses: anchore/scan-action@master
-       with:
-         image-reference: "xview2-cmu-baseline/xview2-cmu-baseline:latest"
-         dockerfile-path: "./submission/Dockerfile"
-         fail-build: true
-         include-app-packages: true
+name: Docker Image CI
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build the Docker image
+      run: docker build . --file ./submission/Dockerfile --tag localbuild/testimage:latest
+    - uses: anchore/scan-action@master
+      with:
+        image-reference: "localbuild/testimage:latest"
+        dockerfile-path: "./submission/Dockerfile"
+        include-app-packages: true  
+        fail-build: true
