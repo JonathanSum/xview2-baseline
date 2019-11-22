@@ -57,6 +57,8 @@ RUN mkdir -p ~/.keras/models/
 
 ADD https://github.com/fchollet/deep-learning-models/releases/download/v0.2/resnet50_weights_tf_dim_ordering_tf_kernels_notop.h5 ~/.keras/models/resnet50_weights_tf_dim_ordering_tf_kernels_notop.h5 
 
+RUN echo $HOME 
+
 # Finally running the container with the run.sh wrapper script to pass the CLI arguments to inference.sh
 RUN chmod +x ~/code/xview-2/submission/run.sh
 ENTRYPOINT ["/home/appuser/code/xview-2/submission/run.sh", "/home/appuser/code/xview-2/"]
