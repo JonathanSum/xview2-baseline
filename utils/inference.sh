@@ -99,9 +99,9 @@ if ! [ -f "$LOGFILE" ]; then
     touch "$LOGFILE"
 fi
 
-printf "==========\n" >> "$LOGFILE"
-echo `date +%Y%m%dT%H%M%S` >> "$LOGFILE"
-printf "\n" >> "$LOGFILE"
+printf "==========\n" #>> "$LOGFILE"
+echo `date +%Y%m%dT%H%M%S` #>> "$LOGFILE"
+printf "\n" #>> "$LOGFILE"
 
 input_image=${input##*/}
 
@@ -132,9 +132,9 @@ cd "$XBDIR"/spacenet/inference/
 
 # Quietly running the localization inference to output a json with the predicted polygons from the supplied input image
 printf "Running localization\n"
-python3.7 ./inference.py --input "$input" --weights "$localization_weights" --mean "$XBDIR"/weights/mean.npy --output "$label_temp"/"${input_image%.*}".json >> "$LOGFILE" 2>&1
+python3.7 ./inference.py --input "$input" --weights "$localization_weights" --mean "$XBDIR"/weights/mean.npy --output "$label_temp"/"${input_image%.*}".json #>> "$LOGFILE" 2>&1
 
-printf "\n" >> "$LOGFILE"
+printf "\n" #>> "$LOGFILE"
 
 # Classification inferences start below
 cd "$XBDIR"/model
@@ -150,26 +150,26 @@ mkdir -p "$inference_base"/output_polygons
 printf "Running classification\n" 
 
 # Extracting polygons from post image 
-python3.7 ./process_data_inference.py --input_img "$disaster_post_file" --label_path "$label_temp"/"${input_image%.*}".json --output_dir "$inference_base"/output_polygons --output_csv "$inference_base"/output.csv >> "$LOGFILE" 2>&1
+python3.7 ./process_data_inference.py --input_img "$disaster_post_file" --label_path "$label_temp"/"${input_image%.*}".json --output_dir "$inference_base"/output_polygons --output_csv "$inference_base"/output.csv #>> "$LOGFILE" 2>&1
 
 # Classifying extracted polygons 
-python3.7 ./damage_inference.py --test_data "$inference_base"/output_polygons --test_csv "$inference_base"/output.csv --model_weights "$classification_weights" --output_json /tmp/inference/classification_inference.json >> "$LOGFILE" 2>&1
+python3.7 ./damage_inference.py --test_data "$inference_base"/output_polygons --test_csv "$inference_base"/output.csv --model_weights "$classification_weights" --output_json /tmp/inference/classification_inference.json #>> "$LOGFILE" 2>&1
 
-printf "\n" >> "$LOGFILE"
+printf "\n" #>> "$LOGFILE"
 
 # Combining the predicted polygons with the predicted labels, based off a UUID generated during the localization inference stage  
 printf "Formatting json and scoring image\n"
-python3.7 "$XBDIR"/utils/combine_jsons.py --polys "$label_temp"/"${input_image%.*}".json --classes /tmp/inference/classification_inference.json --output "$inference_base/inference.json" >> "$LOGFILE" 2>&1
-printf "\n" >> "$LOGFILE"
+python3.7 "$XBDIR"/utils/combine_jsons.py --polys "$label_temp"/"${input_image%.*}".json --classes /tmp/inference/classification_inference.json --output "$inference_base/inference.json" #>> "$LOGFILE" 2>&1
+printf "\n" #>> "$LOGFILE"
 
 # Transforming the inference json file to the image required for scoring
 printf "Finalizing output file" 
-python3.7 "$XBDIR"/utils/inference_image_output.py --input "$inference_base"/inference.json --output "$output_file"  >> "$LOGFILE" 2>&1
+python3.7 "$XBDIR"/utils/inference_image_output.py --input "$inference_base"/inference.json --output "$output_file"  #>> "$LOGFILE" 2>&1
 
 #Cleaning up by removing the temporary working directory we created
 printf "Cleaning up\n"
 rm -rf "$inference_base"
 
-printf "==========\n" >> "$LOGFILE"
+printf "==========\n" #>> "$LOGFILE"
 printf "Done!\n"
 
