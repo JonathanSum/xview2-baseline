@@ -65,7 +65,7 @@ damage_intensity_encoding[0] = 'no-damage'
 def create_generator(test_df, test_dir, output_json_path):
 
     gen = keras.preprocessing.image.ImageDataGenerator(
-                             rescale=1.4)
+                             rescale=1.5)
 
     try:
         gen_flow = gen.flow_from_dataframe(dataframe=test_df,
