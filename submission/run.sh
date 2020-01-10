@@ -19,14 +19,10 @@
 # 1) path to xview2-baseline 
 # 2) path to input pre image 
 # 3) path to input post image 
-# 4) path to output localization image 
-# 5) path to output localization+classification image
+# 4) directory to output images and jsons 
 
-if [ $# -lt 5 ]; then 
+if [ $# -ne 4 ]; then 
         echo "run.sh: /path/to/xview2-baseline/ /path/to/input/pre/image /path/to/input/post/image /path/to/localization/output/image /path/to/classification/output/image" 
 else
-    "$1"/utils/inference.sh -x "$1" -i "$2"  -p "$3" -o "$4"  -l "$1"/weights/localization.h5 -c "$1"/weights/classification.hdf5 -y
-
-    # The two images we will use for scoring will be identical so just copying the output localization png to the classification path 
-    cp "$4" "$5"
+        "$1"/utils/inference_image.sh -x "$1" -i "$2"  -p "$3" -o "$4"  -l "$1"/weights/localization.h5 -c "$1"/weights/classification.hdf5 -y
 fi
