@@ -51,6 +51,7 @@ RUN pip3 install matplotlib tqdm libtiff scipy Pillow scikit-image opencv-python
 
 #ADD xview-2 /code/xview-2/
 RUN git clone https://github.com/deg4uss3r/xview2-baseline.git ~/code/xview-2
+RUN cd ~/code/xview-2 && git checkout inference_image_box_output 
 
 # Grabbing weights for our models
 # UNCOMMENT THIS WHEN REPO/WEIGHTS ARE PUBLIC
