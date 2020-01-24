@@ -50,9 +50,7 @@ RUN pip3 install -U "tensorflow==1.*"
 RUN pip3 install matplotlib tqdm libtiff scipy Pillow scikit-image opencv-python imgaug IPython geopandas keras imantics simplification scikit-learn chainer tensorboard tensorboardX
 
 #ADD xview-2 /code/xview-2/
-RUN git clone https://github.com/deg4uss3r/xview2-baseline.git ~/code/xview-2
-RUN cd ~/code/xview-2 
-RUN git checkout verbose 
+RUN git clone -b verbose https://github.com/deg4uss3r/xview2-baseline.git ~/code/xview-2
 
 # Grabbing weights for our models
 # UNCOMMENT THIS WHEN REPO/WEIGHTS ARE PUBLIC
