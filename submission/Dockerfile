@@ -28,9 +28,14 @@ RUN ln -s /usr/bin/python3 /usr/bin/python
 # Running the rest as non-root
 RUN groupadd -g 999 appuser && \
     useradd -r -u 999 -g appuser appuser && \
-    mkdir -p /home/appuser && \
+    mkdir -p /home/appuser/.keras/models && \
     usermod -a -G sudo appuser && \
     chown -R appuser:appuser /home/appuser
+
+ADD https://github.com/fchollet/deep-learning-models/releases/download/v0.2/resnet50_weights_tf_dim_ordering_tf_kernels_notop.h5 /home/appuser/.keras/models/resnet50_weights_tf_dim_ordering_tf_kernels_notop.h5
+
+RUN chmod -R 777 /home/appuser/
+
 USER appuser
 
 SHELL ["/bin/bash", "-c"]
@@ -46,18 +51,14 @@ RUN pip3 install matplotlib tqdm libtiff scipy Pillow scikit-image opencv-python
 
 #ADD xview-2 /code/xview-2/
 RUN git clone https://github.com/deg4uss3r/xview2-baseline.git ~/code/xview-2
+RUN cd ~/code/xview-2 
+RUN git checkout verbose 
 
 # Grabbing weights for our models
 # UNCOMMENT THIS WHEN REPO/WEIGHTS ARE PUBLIC
 RUN curl -L https://github.com/DIUx-xView/xView2/releases/download/v1.0/localization.h5 -o ~/code/xview-2/weights/localization.h5
 RUN curl -L https://github.com/DIUx-xView/xView2/releases/download/v1.0/classification.hdf5 -o ~/code/xview-2/weights/classification.hdf5
 
-# Downloading ResNet and including it in the image
-RUN mkdir -p ~/.keras/models/ 
-
-ADD https://github.com/fchollet/deep-learning-models/releases/download/v0.2/resnet50_weights_tf_dim_ordering_tf_kernels_notop.h5 ~/.keras/models/resnet50_weights_tf_dim_ordering_tf_kernels_notop.h5 
-
-RUN echo $HOME 
 
 # Finally running the container with the run.sh wrapper script to pass the CLI arguments to inference.sh
 RUN chmod +x ~/code/xview-2/submission/run.sh

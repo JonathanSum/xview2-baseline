@@ -163,7 +163,7 @@ python3 "$XBDIR"/utils/combine_jsons.py --polys "$label_temp"/"${input_image%.*}
 printf "\n" #>> "$LOGFILE"
 
 # Transforming the inference json file to the image required for scoring
-printf "Finalizing output file" 
+printf "Finalizing output file\n" 
 python3 "$XBDIR"/utils/inference_image_output.py --input "$inference_base"/inference.json --output "$output_file"  #>> "$LOGFILE" 2>&1
 
 #Cleaning up by removing the temporary working directory we created
