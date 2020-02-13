@@ -73,7 +73,7 @@ if __name__ == "__main__":
 
     # Parse command line arguments
     parser = argparse.ArgumentParser(
-        description="perfect_scores.py: produces perfect scores for the train set")
+        description="create_dmg_masks.py: Creates maskes with polygon filled by the damage value")
 
     parser.add_argument('--base-dir',
                         required=True,
