@@ -78,11 +78,11 @@ if __name__ == "__main__":
     parser.add_argument('--base-dir',
                         required=True,
                         metavar='/path/to/xBD/train/',
-                        help="Full path to the train directory to produce perfect scores for testing")
+                        help="Full path to the train directory; expects 'labels' under that directory")
     parser.add_argument('--output-dir',
                         required=True,
                         metavar='/path/to/output/directory/',
-                        help="Full path to the train directory to produce perfect scores for testing")
+                        help="Full path to the output directory you wish to store the output pngs")
 
     args = parser.parse_args()
 
