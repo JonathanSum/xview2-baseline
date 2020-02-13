@@ -18,11 +18,13 @@ def get_files(base_dir):
 
 
 def create_image(inference_data):
-    # This is the same function from inference_image_output.py with slight modifications
     damage_key = {'un-classified': 0, 'no-damage': 1, 'minor-damage': 2, 'major-damage': 3, 'destroyed': 4}
-
+    
+    # Creating a blank img 1024x1024x1 (the size of the orginal images, but greyscale not full RGB)
     mask_img = np.zeros((1024,1024,1), np.uint8)
     
+    # For each polygon in the image (according to the json)
+    # Fill the poylgon with the value from the damage key
     for poly in inference_data['features']['xy']:
         if 'subtype' in poly['properties']:
             damage = poly['properties']['subtype']
@@ -34,12 +36,11 @@ def create_image(inference_data):
         poly_np = np.array(coords.exterior.coords, np.int32)
         
         fillPoly(mask_img, [poly_np], damage_key[damage])
-    
+    # Return the image once we've gone over every polygon
     return mask_img
 
 
 def save_image(polygons, output_path):
-    # This is the same function from inference_image_output.py
     # Output the filled in polygons to an image file
     imwrite(output_path, polygons)
 
@@ -47,7 +48,7 @@ def write_gt(infile, output_dir):
     with open(infile) as gt_file:
         gt_json = json.load(gt_file)
 
-        # Localization gt
+        # getting mask only if 'post' is in the title and writing out masks with damage value as the polygon pixel values
         gt_masked_image = create_image(gt_json)
         gt_masked_image_path = path.join(output_dir, path.basename(infile).split('.json')[0]+'_masked_dmg.png')
         save_image(gt_masked_image, gt_masked_image_path)
@@ -75,7 +76,7 @@ if __name__ == "__main__":
         makedirs(args.output_dir)
 
     # We expect all label files to be under a base dir like:
-    # ~/Downloads/train/labels/<ALL_LABELS>.png
+    # ~/Downloads/train/labels/<ALL_LABELS>.json
     all_files = get_files(args.base_dir)
 
     for infile in all_files:
